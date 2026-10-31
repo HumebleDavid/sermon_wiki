@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LLM Wiki - Theological Knowledge Graph & Sermon Archive</title>
+  <title>홍동우 목사의 설교 저장소</title>
   
-  <!-- Fonts: Pretendard & Noto Serif KR -->
+  <!-- Fonts: Pretendard & Noto Serif KR & JetBrains Mono -->
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,6 @@
   <!-- CDN Libraries -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://unpkg.com/force-graph"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Tailwind Configuration -->
@@ -51,7 +50,6 @@
   </script>
 
   <style>
-    /* Editorial Typography & Custom Scrollbar */
     body {
       font-family: Pretendard, -apple-system, sans-serif;
     }
@@ -80,32 +78,33 @@
       line-height: 1.85;
       font-size: 1.05rem;
       word-break: keep-all;
+      transition: font-size 0.15s ease;
     }
     .wiki-content h1 {
       font-family: 'Noto Serif KR', serif;
-      font-size: 2rem;
+      font-size: 1.85rem;
       font-weight: 700;
       margin-top: 2rem;
       margin-bottom: 1.25rem;
       padding-bottom: 0.5rem;
       border-bottom: 1px solid rgba(156, 163, 175, 0.25);
+      scroll-margin-top: 5rem;
     }
     .wiki-content h2 {
       font-family: 'Noto Serif KR', serif;
-      font-size: 1.5rem;
+      font-size: 1.45rem;
       font-weight: 700;
-      margin-top: 2rem;
+      margin-top: 2.25rem;
       margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      scroll-margin-top: 5rem;
     }
     .wiki-content h3 {
       font-family: 'Noto Serif KR', serif;
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 600;
-      margin-top: 1.5rem;
+      margin-top: 1.75rem;
       margin-bottom: 0.75rem;
+      scroll-margin-top: 5rem;
     }
     .wiki-content p {
       margin-bottom: 1.2rem;
@@ -232,140 +231,189 @@
       background: rgba(239, 68, 68, 0.08);
       border-color: #ef4444;
     }
+
+    /* Smooth anchor targeting */
+    .heading-anchor {
+      scroll-margin-top: 4rem;
+    }
   </style>
 </head>
 <body class="h-full bg-editorial-bg dark:bg-editorialDark-bg text-editorial-text dark:text-editorialDark-text transition-colors duration-200 antialiased flex flex-col overflow-hidden">
 
-  <!-- Top App Navigation Bar -->
-  <header class="h-14 border-b border-editorial-border dark:border-editorialDark-border bg-editorial-card/80 dark:bg-editorialDark-surface/80 backdrop-blur sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6">
-    <div class="flex items-center gap-3">
-      <button id="btn-toggle-sidebar" class="lg:hidden p-1.5 rounded-md hover:bg-black/5 dark:hover:bg-white/10 text-stone-600 dark:text-stone-300">
-        <i data-lucide="menu" class="w-5 h-5"></i>
+  <!-- Top Navigation Header -->
+  <header class="h-14 border-b border-editorial-border dark:border-editorialDark-border bg-editorial-card/85 dark:bg-editorialDark-surface/85 backdrop-blur sticky top-0 z-30 flex items-center justify-between px-3 sm:px-5">
+    
+    <!-- Left: Brand & Mobile Sidebar Toggle -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <button id="btn-toggle-left-sidebar" class="lg:hidden p-1.5 rounded-md hover:bg-black/5 dark:hover:bg-white/10 text-stone-600 dark:text-stone-300" title="설교문 아카이브 메뉴">
+        <i data-lucide="scroll" class="w-5 h-5 text-rose-500"></i>
       </button>
-      <a href="#/02_Wiki/index" class="flex items-center gap-2 group">
-        <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold shadow-sm group-hover:scale-105 transition-transform">
+
+      <a href="#/02_Wiki/index" class="flex items-center gap-2.5 group">
+        <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition-transform">
           📖
         </div>
         <div>
-          <span class="font-serif font-bold text-lg tracking-tight text-stone-900 dark:text-stone-100">LLM Wiki</span>
-          <span class="hidden md:inline-block text-xs px-2 py-0.5 ml-2 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-medium border border-blue-200 dark:border-blue-900">
-            Karpathy Architecture
+          <span class="font-serif font-bold text-base sm:text-lg tracking-tight text-stone-900 dark:text-stone-100">
+            홍동우 목사의 설교 저장소
           </span>
         </div>
       </a>
     </div>
 
-    <!-- Center Search Bar Trigger -->
-    <div class="flex-1 max-w-md mx-4">
-      <button id="btn-open-search" class="w-full flex items-center justify-between px-3.5 py-1.5 text-sm rounded-lg border border-editorial-border dark:border-editorialDark-border bg-stone-100/70 dark:bg-stone-800/60 hover:bg-stone-200/60 dark:hover:bg-stone-800 transition-colors text-stone-500 dark:text-stone-400">
-        <span class="flex items-center gap-2">
+    <!-- Center: Search Trigger Bar -->
+    <div class="flex-1 max-w-sm mx-2 sm:mx-4">
+      <button id="btn-open-search" class="w-full flex items-center justify-between px-3 py-1.5 text-xs sm:text-sm rounded-lg border border-editorial-border dark:border-editorialDark-border bg-stone-100/70 dark:bg-stone-800/60 hover:bg-stone-200/60 dark:hover:bg-stone-800 transition-colors text-stone-500 dark:text-stone-400">
+        <span class="flex items-center gap-2 truncate">
           <i data-lucide="search" class="w-4 h-4"></i>
-          <span class="hidden sm:inline">문서 검색 (개념, 인물, 설교문)...</span>
-          <span class="sm:hidden">검색...</span>
+          <span class="hidden md:inline">설교문, 신학 개념, 성경 구절 검색...</span>
+          <span class="md:hidden">검색...</span>
         </span>
-        <kbd class="text-xs px-1.5 py-0.5 rounded border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 font-mono text-stone-600 dark:text-stone-300 shadow-xs">⌘K</kbd>
+        <kbd class="text-[10px] sm:text-xs px-1.5 py-0.5 rounded border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 font-mono text-stone-600 dark:text-stone-300">⌘K</kbd>
       </button>
     </div>
 
-    <!-- Right Controls -->
-    <div class="flex items-center gap-2">
-      <!-- Split View Toggle Button -->
-      <button id="btn-toggle-split" title="듀얼 리딩 모드(좌우 분할)" class="p-2 rounded-lg border border-editorial-border dark:border-editorialDark-border hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300 flex items-center gap-1.5 text-xs font-medium transition-colors">
+    <!-- Right Controls: Font Size, Split View, Theme Toggle, Mobile Right Toggle -->
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      
+      <!-- Font Size Controller (A- / 100% / A+) -->
+      <div class="flex items-center bg-stone-100 dark:bg-stone-800 p-0.5 rounded-lg border border-editorial-border dark:border-editorialDark-border text-xs">
+        <button id="btn-font-dec" class="px-2 py-1 rounded hover:bg-white dark:hover:bg-stone-700 font-bold text-stone-700 dark:text-stone-300 transition-colors" title="글자 축소">A-</button>
+        <span id="font-size-label" class="px-1.5 text-[11px] font-mono text-stone-500 select-none">100%</span>
+        <button id="btn-font-inc" class="px-2 py-1 rounded hover:bg-white dark:hover:bg-stone-700 font-bold text-stone-700 dark:text-stone-300 transition-colors" title="글자 확대">A+</button>
+      </div>
+
+      <!-- Split View Toggle -->
+      <button id="btn-toggle-split" title="듀얼 리딩 모드(신학 개념과 설교문 좌우 분할)" class="p-2 rounded-lg border border-editorial-border dark:border-editorialDark-border hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300 flex items-center gap-1 text-xs font-medium transition-colors">
         <i data-lucide="columns-2" class="w-4 h-4"></i>
         <span class="hidden xl:inline" id="split-btn-text">Split View</span>
       </button>
 
-      <!-- Graph View Mobile Toggle Button -->
-      <button id="btn-toggle-right-panel" title="지식 그래프 / 목차 패널 토글" class="xl:hidden p-2 rounded-lg border border-editorial-border dark:border-editorialDark-border hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300 transition-colors">
-        <i data-lucide="network" class="w-4 h-4"></i>
-      </button>
-
-      <!-- Dark Mode Toggle -->
+      <!-- Theme Toggle -->
       <button id="btn-theme-toggle" title="다크 모드 / 라이트 모드 전환" class="p-2 rounded-lg border border-editorial-border dark:border-editorialDark-border hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300 transition-colors">
         <i data-lucide="moon" class="w-4 h-4 hidden dark:block"></i>
         <i data-lucide="sun" class="w-4 h-4 block dark:hidden"></i>
       </button>
+
+      <!-- Mobile Right Sidebar (신학 개념 아카이브) Toggle -->
+      <button id="btn-toggle-right-sidebar" class="xl:hidden p-1.5 rounded-md hover:bg-black/5 dark:hover:bg-white/10 text-stone-600 dark:text-stone-300" title="신학 개념 아카이브 메뉴">
+        <i data-lucide="lightbulb" class="w-5 h-5 text-emerald-500"></i>
+      </button>
     </div>
   </header>
 
-  <!-- Main Container Layout -->
+  <!-- Main Container: 3-Column Layout -->
   <div class="flex-1 flex overflow-hidden relative">
 
-    <!-- 1. Left Sidebar (Navigation & Hierarchy Tree) -->
-    <aside id="sidebar" class="w-72 lg:w-80 flex-shrink-0 border-r border-editorial-border dark:border-editorialDark-border bg-editorial-card dark:bg-editorialDark-surface flex flex-col z-20 absolute lg:relative inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out shadow-lg lg:shadow-none">
+    <!-- 1. LEFT SIDEBAR: [설교문 아카이브] (01_Raw) -->
+    <aside id="left-sidebar" class="w-72 sm:w-80 flex-shrink-0 border-r border-editorial-border dark:border-editorialDark-border bg-editorial-card dark:bg-editorialDark-surface flex flex-col z-20 absolute lg:relative inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out shadow-lg lg:shadow-none">
       
-      <!-- Quick Navigation Header -->
-      <div class="p-3 border-b border-editorial-border dark:border-editorialDark-border flex items-center justify-between">
-        <a href="#/02_Wiki/index" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-stone-100 dark:bg-stone-800/80 hover:bg-blue-50 dark:hover:bg-blue-950/40 text-stone-900 dark:text-stone-100 font-medium text-sm transition-colors">
-          <i data-lucide="home" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
-          <span>위키 마스터 목차 (Index)</span>
+      <!-- Left Sidebar Header -->
+      <div class="p-3 border-b border-editorial-border dark:border-editorialDark-border flex items-center justify-between bg-stone-50/50 dark:bg-stone-900/30">
+        <div class="flex items-center gap-2">
+          <i data-lucide="scroll" class="w-4 h-4 text-rose-500"></i>
+          <div>
+            <h3 class="font-bold text-xs uppercase tracking-wider text-stone-800 dark:text-stone-200">설교문 아카이브</h3>
+            <p class="text-[10px] text-stone-400">01_Raw 원문 강해 설교</p>
+          </div>
+        </div>
+        <a href="#/02_Wiki/index" class="p-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-500" title="홈(목차)으로 이동">
+          <i data-lucide="home" class="w-4 h-4"></i>
         </a>
       </div>
 
-      <!-- Navigation Tree Scroll Area -->
-      <nav id="nav-tree" class="flex-1 overflow-y-auto p-3 space-y-4 text-sm select-none">
-        <!-- Dynamic Category Accordions will be rendered here -->
+      <!-- Sermon Series List Scroll Area -->
+      <nav id="left-sermon-tree" class="flex-1 overflow-y-auto p-3 space-y-3 text-sm select-none">
+        <!-- Dynamic Sermon Series Accordions -->
       </nav>
 
-      <!-- Sidebar Footer Stats -->
-      <div id="sidebar-footer" class="p-3 border-t border-editorial-border dark:border-editorialDark-border text-xs text-stone-500 dark:text-stone-400 flex items-center justify-between">
-        <span id="stat-doc-count">문서 불러오는 중...</span>
-        <a href="#/02_Wiki/log" class="hover:underline flex items-center gap-1">
-          <i data-lucide="history" class="w-3.5 h-3.5"></i>
-          <span>작업 로그</span>
-        </a>
+      <!-- Left Sidebar Footer -->
+      <div class="p-2.5 border-t border-editorial-border dark:border-editorialDark-border text-[11px] text-stone-400 flex items-center justify-between">
+        <span id="stat-sermon-count">설교문 37편</span>
+        <span class="text-rose-500/80">Read-only 원문</span>
       </div>
     </aside>
 
-    <!-- Sidebar Backdrop on Mobile -->
-    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/40 z-10 hidden lg:hidden"></div>
+    <!-- Mobile Backdrop for Left Sidebar -->
+    <div id="left-backdrop" class="fixed inset-0 bg-black/40 z-10 hidden lg:hidden"></div>
 
-    <!-- 2. Center Content Area (Single View or Split View) -->
-    <main id="main-content-area" class="flex-1 flex overflow-hidden bg-editorial-bg dark:bg-editorialDark-bg relative">
+    <!-- 2. CENTER: Main Reading Pane (and Split Pane) -->
+    <main id="main-reading-area" class="flex-1 flex overflow-hidden bg-editorial-bg dark:bg-editorialDark-bg relative">
       
-      <!-- Primary Reading Pane -->
+      <!-- Primary Document Pane -->
       <div id="primary-pane" class="flex-1 flex flex-col overflow-y-auto min-w-[320px] transition-all duration-200">
-        <div class="max-w-4xl w-full mx-auto px-6 sm:px-10 py-8 flex-1 flex flex-col">
+        <div class="max-w-4xl w-full mx-auto px-5 sm:px-10 py-6 sm:py-8 flex-1 flex flex-col">
           
-          <!-- Breadcrumb & Top Actions -->
+          <!-- Sticky Toolbar inside Reading Pane: Breadcrumbs & Actions -->
           <div class="flex items-center justify-between text-xs text-stone-500 dark:text-stone-400 mb-4 pb-2 border-b border-editorial-border/60 dark:border-editorialDark-border/60">
-            <div id="primary-breadcrumb" class="flex items-center gap-1.5 flex-wrap">
-              <span>02_Wiki</span>
+            <div id="primary-breadcrumb" class="flex items-center gap-1.5 flex-wrap truncate">
+              <span id="primary-folder-crumb">아카이브</span>
               <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-              <span id="primary-category-crumb">Concept</span>
+              <span id="primary-category-crumb" class="font-medium text-stone-700 dark:text-stone-300">문서</span>
             </div>
-            <div class="flex items-center gap-2">
-              <button id="btn-primary-open-split" class="hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1" title="우측에 설교 원문 나란히 열기">
+            
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <!-- Quick TOC Jump Button -->
+              <div class="relative inline-block text-left" id="toc-dropdown-wrapper">
+                <button id="btn-toc-dropdown" class="px-2.5 py-1 rounded border border-editorial-border dark:border-editorialDark-border hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300 flex items-center gap-1 text-xs">
+                  <i data-lucide="list" class="w-3.5 h-3.5"></i>
+                  <span>목차</span>
+                </button>
+                <!-- TOC Dropdown Popover -->
+                <div id="toc-dropdown-menu" class="hidden absolute right-0 mt-1 w-64 max-h-80 overflow-y-auto rounded-lg shadow-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-2 z-50 text-xs">
+                  <div class="font-bold px-2 py-1 text-stone-400 uppercase tracking-wider text-[10px] border-b border-stone-100 dark:border-stone-800 mb-1">문서 목차 바로가기</div>
+                  <nav id="toc-dropdown-list" class="space-y-1"></nav>
+                </div>
+              </div>
+
+              <!-- Open Split View action -->
+              <button id="btn-primary-open-split" class="hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 text-xs" title="우측에 대조 문서 나란히 열기">
                 <i data-lucide="split" class="w-3.5 h-3.5"></i>
-                <span class="hidden sm:inline">나란히 읽기</span>
+                <span class="hidden sm:inline">대조 읽기</span>
               </button>
             </div>
           </div>
 
-          <!-- Document Header -->
+          <!-- Document Header (Title Rendered EXACTLY ONCE) -->
           <header class="mb-6">
-            <div class="flex items-center gap-2 mb-3 flex-wrap" id="primary-badges">
-              <!-- Type Badge, Date Badge, Scripture etc. -->
+            <div class="flex items-center gap-1.5 sm:gap-2 mb-3 flex-wrap" id="primary-badges">
+              <!-- Type, Date, Series, Scripture badges -->
             </div>
-            <h1 id="primary-title" class="serif-title text-3xl sm:text-4xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-tight mb-3">
+            <h1 id="primary-title" class="serif-title text-2xl sm:text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-50 leading-tight mb-2">
               문서를 불러오는 중입니다...
             </h1>
-            <p id="primary-subject" class="text-stone-600 dark:text-stone-300 font-serif italic text-base border-l-2 border-stone-300 dark:border-stone-700 pl-3 hidden">
+            <p id="primary-subject" class="text-stone-600 dark:text-stone-300 font-serif italic text-sm sm:text-base border-l-2 border-stone-300 dark:border-stone-700 pl-3 hidden">
             </p>
           </header>
+
+          <!-- Inline Table of Contents Card (Collapsible) -->
+          <div id="inline-toc-card" class="mb-8 p-3.5 rounded-xl border border-editorial-border dark:border-editorialDark-border bg-stone-50/70 dark:bg-stone-900/40 hidden">
+            <details id="inline-toc-details" open class="group">
+              <summary class="flex items-center justify-between cursor-pointer font-serif font-bold text-sm text-stone-800 dark:text-stone-200 select-none">
+                <span class="flex items-center gap-2">
+                  <i data-lucide="list-tree" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
+                  <span>문서 목차 (Table of Contents)</span>
+                </span>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-stone-400 transition-transform group-open:rotate-180"></i>
+              </summary>
+              <nav id="inline-toc-list" class="mt-3 pt-2.5 border-t border-stone-200/60 dark:border-stone-800/60 space-y-1.5 text-xs sm:text-sm pl-1">
+                <!-- TOC Links with smooth scroll -->
+              </nav>
+            </details>
+          </div>
 
           <!-- Rendered Markdown Body -->
           <article id="primary-body" class="wiki-content text-stone-800 dark:text-stone-200 flex-1">
             <div class="py-20 text-center text-stone-400">
               <i data-lucide="loader-2" class="w-8 h-8 animate-spin mx-auto mb-2 text-blue-500"></i>
-              <p>지식 베이스를 색인하고 있습니다...</p>
+              <p>문서를 불러오는 중입니다...</p>
             </div>
           </article>
 
-          <!-- Backlinks Card Section -->
+          <!-- Backlinks Section -->
           <section id="primary-backlinks-section" class="mt-16 pt-8 border-t border-editorial-border dark:border-editorialDark-border">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="font-serif font-bold text-lg flex items-center gap-2 text-stone-900 dark:text-stone-100">
+              <h3 class="font-serif font-bold text-base sm:text-lg flex items-center gap-2 text-stone-900 dark:text-stone-100">
                 <i data-lucide="link-2" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
                 <span>역방향 참조 (Backlinks)</span>
               </h3>
@@ -374,39 +422,36 @@
               </span>
             </div>
             <div id="primary-backlinks-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <!-- Backlink cards inserted dynamically -->
+              <!-- Backlink cards -->
             </div>
           </section>
 
         </div>
       </div>
 
-      <!-- Secondary Split Pane (Hidden by default, shown in Split View) -->
+      <!-- Secondary Split Pane (Dual Reading Mode) -->
       <div id="secondary-pane" class="w-1/2 flex-shrink-0 border-l border-editorial-border dark:border-editorialDark-border flex-col overflow-y-auto hidden bg-stone-50/60 dark:bg-stone-900/60 transition-all duration-200">
-        <div class="w-full px-6 sm:px-8 py-8 flex-1 flex flex-col">
+        <div class="w-full px-5 sm:px-8 py-6 sm:py-8 flex-1 flex flex-col">
           
-          <!-- Secondary Pane Header -->
           <div class="flex items-center justify-between text-xs text-stone-500 dark:text-stone-400 mb-4 pb-2 border-b border-editorial-border/60 dark:border-editorialDark-border/60">
             <div class="flex items-center gap-1.5">
               <span class="px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 font-medium text-[11px]">대조 뷰</span>
-              <span id="secondary-category-crumb">01_Raw</span>
+              <span id="secondary-category-crumb">대조 문서</span>
             </div>
-            <div class="flex items-center gap-2">
-              <button id="btn-close-split" class="p-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-500" title="분할 닫기">
-                <i data-lucide="x" class="w-4 h-4"></i>
-              </button>
-            </div>
+            <button id="btn-close-split" class="p-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-500" title="분할 닫기">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
           </div>
 
           <header class="mb-5">
             <div class="flex items-center gap-2 mb-2 flex-wrap" id="secondary-badges"></div>
-            <h2 id="secondary-title" class="serif-title text-2xl font-bold text-stone-900 dark:text-stone-50 leading-snug"></h2>
+            <h2 id="secondary-title" class="serif-title text-xl sm:text-2xl font-bold text-stone-900 dark:text-stone-50 leading-snug"></h2>
           </header>
 
           <article id="secondary-body" class="wiki-content text-stone-800 dark:text-stone-200 flex-1"></article>
 
-          <section id="secondary-backlinks-section" class="mt-12 pt-6 border-t border-editorial-border dark:border-editorialDark-border">
-            <h4 class="font-bold text-sm mb-3 text-stone-700 dark:text-stone-300">연결된 역링크</h4>
+          <section id="secondary-backlinks-section" class="mt-10 pt-6 border-t border-editorial-border dark:border-editorialDark-border">
+            <h4 class="font-bold text-xs uppercase tracking-wider text-stone-500 mb-3">연결된 역링크</h4>
             <div id="secondary-backlinks-list" class="space-y-2"></div>
           </section>
 
@@ -415,45 +460,51 @@
 
     </main>
 
-    <!-- 3. Right Auxiliary Panel (Graph View & Table of Contents) -->
-    <aside id="right-panel" class="w-80 flex-shrink-0 border-l border-editorial-border dark:border-editorialDark-border bg-editorial-card dark:bg-editorialDark-surface flex-col z-20 hidden xl:flex">
+    <!-- 3. RIGHT SIDEBAR: [신학 개념 아카이브] (02_Wiki) -->
+    <aside id="right-sidebar" class="w-72 sm:w-80 flex-shrink-0 border-l border-editorial-border dark:border-editorialDark-border bg-editorial-card dark:bg-editorialDark-surface flex flex-col z-20 absolute xl:relative inset-y-0 right-0 transform translate-x-full xl:translate-x-0 transition-transform duration-200 ease-in-out shadow-lg xl:shadow-none">
       
-      <!-- Right Panel Tab Switcher -->
-      <div class="h-11 border-b border-editorial-border dark:border-editorialDark-border flex items-center px-3 justify-between">
-        <div class="flex items-center gap-1 bg-stone-100 dark:bg-stone-800 p-0.5 rounded-lg text-xs font-medium">
-          <button id="tab-graph" class="px-2.5 py-1 rounded-md bg-white dark:bg-stone-900 shadow-xs text-blue-600 dark:text-blue-400">지식 그래프</button>
-          <button id="tab-toc" class="px-2.5 py-1 rounded-md text-stone-600 dark:text-stone-400 hover:text-stone-900">문서 목차</button>
+      <!-- Right Sidebar Header -->
+      <div class="p-3 border-b border-editorial-border dark:border-editorialDark-border flex items-center justify-between bg-stone-50/50 dark:bg-stone-900/30">
+        <div class="flex items-center gap-2">
+          <i data-lucide="lightbulb" class="w-4 h-4 text-emerald-500"></i>
+          <div>
+            <h3 class="font-bold text-xs uppercase tracking-wider text-stone-800 dark:text-stone-200">신학 개념 아카이브</h3>
+            <p class="text-[10px] text-stone-400">02_Wiki 신학 지식 베이스</p>
+          </div>
         </div>
-        <div id="graph-controls" class="flex items-center gap-1 text-xs">
-          <button id="btn-toggle-graph-scope" class="px-2 py-0.5 rounded border border-editorial-border dark:border-editorialDark-border hover:bg-stone-100 dark:hover:bg-stone-800 text-[11px] text-stone-600 dark:text-stone-300" title="로컬/글로벌 그래프 전환">
-            전체 보기
-          </button>
-        </div>
+        <a href="#/02_Wiki/log" class="p-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-500" title="작업 로그">
+          <i data-lucide="history" class="w-4 h-4"></i>
+        </a>
       </div>
 
-      <!-- Graph View Container -->
-      <div id="graph-panel-content" class="flex-1 flex flex-col relative h-[360px] overflow-hidden">
-        <div id="graph-canvas-container" class="flex-1 w-full h-full bg-stone-50 dark:bg-stone-950/50"></div>
-        
-        <!-- Graph Legend -->
-        <div class="p-2.5 border-t border-editorial-border dark:border-editorialDark-border bg-editorial-card/90 dark:bg-editorialDark-surface/90 text-[11px] flex items-center justify-between flex-wrap gap-1">
-          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>개념</span>
-          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>개체</span>
-          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-500 inline-block"></span>종합</span>
-          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span>소스</span>
-          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>설교문</span>
+      <!-- Active Document Mini TOC (Top of Right Sidebar) -->
+      <div id="right-doc-toc-wrapper" class="p-3 border-b border-editorial-border dark:border-editorialDark-border bg-stone-50/30 dark:bg-stone-900/20 hidden">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-stone-500 flex items-center gap-1.5">
+            <i data-lucide="bookmark" class="w-3.5 h-3.5 text-blue-500"></i>
+            <span>현재 글 목차</span>
+          </span>
+          <span id="right-doc-toc-count" class="text-[10px] text-stone-400"></span>
         </div>
-      </div>
-
-      <!-- Table of Contents (TOC) Container -->
-      <div id="toc-panel-content" class="flex-1 overflow-y-auto p-4 hidden">
-        <h4 class="font-bold text-xs uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-3">On this page</h4>
-        <nav id="toc-list" class="space-y-1.5 text-sm">
-          <!-- Dynamic TOC items -->
+        <nav id="right-doc-toc-list" class="space-y-1 text-xs max-h-48 overflow-y-auto pr-1">
+          <!-- Dynamic TOC items with smooth scroll -->
         </nav>
       </div>
 
+      <!-- Wiki Categories Scroll Area -->
+      <nav id="right-wiki-tree" class="flex-1 overflow-y-auto p-3 space-y-3 text-sm select-none">
+        <!-- Concepts, Syntheses, Entities, Source Notes Accordions -->
+      </nav>
+
+      <!-- Right Sidebar Footer -->
+      <div class="p-2.5 border-t border-editorial-border dark:border-editorialDark-border text-[11px] text-stone-400 flex items-center justify-between">
+        <span id="stat-wiki-count">신학 문서 27편</span>
+        <span class="text-emerald-600 dark:text-emerald-400 font-medium">지식 아키텍처</span>
+      </div>
     </aside>
+
+    <!-- Mobile Backdrop for Right Sidebar -->
+    <div id="right-backdrop" class="fixed inset-0 bg-black/40 z-10 hidden xl:hidden"></div>
 
   </div>
 
@@ -461,24 +512,21 @@
   <div id="search-modal" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 hidden">
     <div class="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[75vh] animate-in fade-in-0 zoom-in-95 duration-150">
       
-      <!-- Search Input Header -->
       <div class="p-3.5 border-b border-stone-200 dark:border-stone-800 flex items-center gap-3">
         <i data-lucide="search" class="w-5 h-5 text-stone-400"></i>
-        <input id="search-input" type="text" placeholder="문서 제목, 신학 개념, 성경 구절, 태그 검색..." class="flex-1 bg-transparent text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-hidden text-base" autofocus />
+        <input id="search-input" type="text" placeholder="설교문 제목, 신학 개념, 성경 구절, 태그 검색..." class="flex-1 bg-transparent text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-hidden text-base" autofocus />
         <kbd class="text-xs px-1.5 py-0.5 rounded border border-stone-300 dark:border-stone-700 bg-stone-100 dark:bg-stone-800 text-stone-500 font-mono">ESC</kbd>
       </div>
 
-      <!-- Search Results Scroll Area -->
       <div id="search-results" class="flex-1 overflow-y-auto p-2 space-y-1 divide-y divide-stone-100 dark:divide-stone-800/60">
         <div class="p-6 text-center text-sm text-stone-400">
           키워드를 입력하면 실시간으로 검색됩니다.
         </div>
       </div>
 
-      <!-- Search Modal Footer -->
       <div class="p-2.5 border-t border-stone-100 dark:border-stone-800 bg-stone-50 dark:bg-stone-950/50 text-[11px] text-stone-500 flex items-center justify-between">
         <span>선택: <kbd class="font-mono">Enter</kbd> | 이동: <kbd class="font-mono">↑</kbd> <kbd class="font-mono">↓</kbd></span>
-        <span>듀얼 뷰 열기: <kbd class="font-mono">Shift + Click</kbd></span>
+        <span>대조 뷰 열기: <kbd class="font-mono">Shift + Click</kbd></span>
       </div>
 
     </div>
@@ -489,12 +537,10 @@
     // State
     const state = {
       wikiData: null,
-      currentDocId: '02_Wiki/index',
+      currentDocId: '02_Wiki/index.md',
       splitDocId: null,
       isSplit: false,
-      graphScope: 'local', // 'local' | 'global'
-      activeTab: 'graph',   // 'graph' | 'toc'
-      graphInstance: null,
+      fontSizeScale: parseInt(localStorage.getItem('wikiFontSize')) || 100,
     };
 
     // Color definitions
@@ -507,6 +553,41 @@
       index: { bg: 'bg-slate-100 dark:bg-slate-800', text: 'text-slate-700 dark:text-slate-300', border: 'border-slate-200 dark:border-slate-700', hex: '#64748b', label: '목차' },
       log: { bg: 'bg-stone-100 dark:bg-stone-800', text: 'text-stone-600 dark:text-stone-300', border: 'border-stone-200 dark:border-stone-700', hex: '#94a3b8', label: '로그' },
     };
+
+    // Slug generator for Korean and English
+    function slugify(text) {
+      return text.toLowerCase()
+        .replace(/[^\w\s가-힣-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
+    // Configure Marked with Heading Anchors for TOC Scroll
+    const slugCounts = new Map();
+    const markedRenderer = {
+      heading(arg1, arg2) {
+        // Marked v4/v12 compatibility
+        let text = '', depth = 2;
+        if (typeof arg1 === 'object' && arg1 !== null) {
+          text = arg1.text || '';
+          depth = arg1.depth || 2;
+        } else {
+          text = arg1 || '';
+          depth = arg2 || 2;
+        }
+
+        const rawClean = text.replace(/<[^>]+>/g, '').trim();
+        let slug = slugify(rawClean);
+        if (!slug) slug = `section-${Math.random().toString(36).substr(2, 5)}`;
+
+        const count = slugCounts.get(slug) || 0;
+        slugCounts.set(slug, count + 1);
+        const finalSlug = count > 0 ? `${slug}-${count}` : slug;
+
+        return `<h${depth} id="${finalSlug}" class="heading-anchor group flex items-center gap-2">${text} <a href="#${finalSlug}" class="opacity-0 group-hover:opacity-100 text-stone-400 hover:text-blue-500 text-xs transition-opacity" title="섹션 바로가기">#</a></h${depth}>`;
+      }
+    };
+    marked.use({ renderer: markedRenderer });
 
     // Theme Management
     function initTheme() {
@@ -521,17 +602,31 @@
     function toggleTheme() {
       const isDark = document.documentElement.classList.toggle('dark');
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      if (state.graphInstance) {
-        updateGraphTheme();
-      }
     }
 
-    // Markdown Parser with Wikilinks & Callouts
+    // Font Size Scaling
+    function updateFontSize(scale) {
+      state.fontSizeScale = Math.min(150, Math.max(80, scale));
+      localStorage.setItem('wikiFontSize', state.fontSizeScale);
+      document.querySelectorAll('.wiki-content').forEach(el => {
+        el.style.fontSize = `${state.fontSizeScale}%`;
+      });
+      document.getElementById('font-size-label').textContent = `${state.fontSizeScale}%`;
+    }
+
+    // Preprocess Markdown: convert **[text]** to bold & Wikilinks to <a>
     function preprocessMarkdown(md) {
       if (!md) return '';
 
-      // 1. Convert [[Target|Display]] or [[Target]] to interactive wikilink tag
-      let processed = md.replace(/\[\[([^\]\r\n|]+)(?:\|([^\]\r\n]+))?\]\]/g, (match, target, display) => {
+      // 1. Convert **[text]** to bold <strong>text</strong> (Item 7)
+      let processed = md.replace(/\*\*\[([^\]\r\n]+)\]\*\*/g, '<strong>$1</strong>');
+
+      // 2. Anonymize any lingering church name to D교회
+      processed = processed.replace(/동신교회\s*\((?:Dongshin\s*Church|Dongshin)\)/gi, 'D교회')
+                           .replace(/동신교회/g, 'D교회');
+
+      // 3. Convert [[Target|Display]] or [[Target]] to interactive wikilink tag
+      processed = processed.replace(/\[\[([^\]\r\n|]+)(?:\|([^\]\r\n]+))?\]\]/g, (match, target, display) => {
         const rawTarget = target.trim();
         const text = (display || target).trim();
         const resolved = resolveDoc(rawTarget);
@@ -542,7 +637,7 @@
         return `<span class="wikilink-broken opacity-60 line-through" title="미생성 문서: ${rawTarget}">[[${text}]]</span>`;
       });
 
-      // 2. Convert Callouts (> [!NOTE], > [!QUOTE] etc.)
+      // 4. Convert Callouts (> [!NOTE], > [!QUOTE] etc.)
       processed = processed.replace(/^>\s*\[!([A-Z]+)\]\s*(.*)$/gm, (match, type, title) => {
         const t = type.toLowerCase();
         let icon = 'info';
@@ -560,9 +655,13 @@
       if (!state.wikiData) return null;
       const docs = state.wikiData.docs;
 
-      // Clean query
       let q = query.replace(/^\.\//, '').replace(/^\[\[/, '').replace(/\]\]$/, '').trim();
       
+      // Alias check for D교회
+      if (q === '동신교회' || q === '동신교회 (Dongshin Church)' || q === 'D교회' || q === 'D교회 (D Church)') {
+        return docs['02_Wiki/D교회.md'] || docs['02_Wiki/D교회'];
+      }
+
       // Exact ID or path
       if (docs[q]) return docs[q];
       if (docs[q + '.md']) return docs[q + '.md'];
@@ -584,11 +683,9 @@
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         state.wikiData = await resp.json();
         
-        document.getElementById('stat-doc-count').textContent = `총 ${state.wikiData.totalDocs}개 문서 (${state.wikiData.totalLinks}개 연결)`;
-
-        renderSidebarTree();
+        renderLeftSidebarTree();
+        renderRightSidebarTree();
         handleRoute();
-        initForceGraph();
       } catch (err) {
         console.error('Failed to load wiki-data.json:', err);
         document.getElementById('primary-body').innerHTML = `
@@ -600,26 +697,61 @@
       }
     }
 
-    // Render Left Sidebar Accordions
-    function renderSidebarTree() {
-      const container = document.getElementById('nav-tree');
+    // Render LEFT Sidebar: [설교문 아카이브] (01_Raw)
+    function renderLeftSidebarTree() {
+      const container = document.getElementById('left-sermon-tree');
       container.innerHTML = '';
 
       const docs = Object.values(state.wikiData.docs);
+      const rawDocs = docs.filter(d => d.rootFolder === '01_Raw');
+      document.getElementById('stat-sermon-count').textContent = `설교문 ${rawDocs.length}편`;
 
-      // Section 1: 02_Wiki Grouped
-      const wikiGroup = document.createElement('div');
-      wikiGroup.className = 'space-y-2';
-      wikiGroup.innerHTML = `
-        <div class="px-2 text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">
-          02_Wiki 신학 지식 베이스
-        </div>
-      `;
+      state.wikiData.sermonSeries.forEach(seriesName => {
+        const seriesDocs = rawDocs.filter(d => d.folder === seriesName)
+                                  .sort((a, b) => (a.frontmatter.created || a.name).localeCompare(b.frontmatter.created || b.name));
+
+        const cleanSeriesTitle = seriesName.replace(/^\[.*?\]\s*/, '');
+
+        const details = document.createElement('details');
+        details.className = 'group border border-editorial-border/60 dark:border-editorialDark-border/60 rounded-lg overflow-hidden';
+        details.open = true;
+
+        details.innerHTML = `
+          <summary class="flex items-center justify-between px-3 py-2 bg-stone-50/70 dark:bg-stone-900/40 hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer font-medium text-xs text-stone-700 dark:text-stone-300">
+            <span class="flex items-center gap-1.5 truncate">
+              <i data-lucide="folder" class="w-3.5 h-3.5 text-rose-500"></i>
+              <span class="truncate font-semibold" title="${seriesName}">${cleanSeriesTitle}</span>
+            </span>
+            <span class="text-[10px] px-1.5 py-0.2 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-500">${seriesDocs.length}</span>
+          </summary>
+          <div class="p-1.5 space-y-0.5 bg-white dark:bg-editorialDark-surface">
+            ${seriesDocs.map(d => `
+              <a href="#/${encodeURIComponent(d.id)}" data-doc-id="${d.id}" class="nav-item block px-2.5 py-1.5 rounded-md text-xs text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors truncate" title="${d.title}">
+                <span class="font-mono text-[10px] text-stone-400 mr-1">${d.name}</span>
+                <span>${d.title || d.name}</span>
+              </a>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(details);
+      });
+
+      lucide.createIcons();
+    }
+
+    // Render RIGHT Sidebar: [신학 개념 아카이브] (02_Wiki)
+    function renderRightSidebarTree() {
+      const container = document.getElementById('right-wiki-tree');
+      container.innerHTML = '';
+
+      const docs = Object.values(state.wikiData.docs);
+      const wikiDocs = docs.filter(d => d.rootFolder === '02_Wiki' && d.name !== 'index' && d.name !== 'log');
+      document.getElementById('stat-wiki-count').textContent = `신학 문서 ${wikiDocs.length}편`;
 
       const wikiCategories = [
         { type: 'concept', label: '개념 (Concepts)', icon: 'lightbulb', color: 'text-emerald-500' },
         { type: 'synthesis', label: '종합 통찰 (Syntheses)', icon: 'git-merge', color: 'text-purple-500' },
-        { type: 'entity', label: '인물/공동체 (Entities)', icon: 'users', color: 'text-amber-500' },
+        { type: 'entity', label: '인물 / 공동체 (Entities)', icon: 'users', color: 'text-amber-500' },
         { type: 'source_notes', label: '원천 분석 (Source Notes)', icon: 'book-open', color: 'text-blue-500' },
       ];
 
@@ -632,12 +764,12 @@
         details.open = true;
 
         details.innerHTML = `
-          <summary class="flex items-center justify-between px-3 py-2 bg-stone-50/60 dark:bg-stone-900/40 hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer font-medium text-xs text-stone-700 dark:text-stone-300">
+          <summary class="flex items-center justify-between px-3 py-2 bg-stone-50/70 dark:bg-stone-900/40 hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer font-medium text-xs text-stone-700 dark:text-stone-300">
             <span class="flex items-center gap-1.5">
               <i data-lucide="${cat.icon}" class="w-3.5 h-3.5 ${cat.color}"></i>
-              <span>${cat.label}</span>
+              <span class="font-semibold">${cat.label}</span>
             </span>
-            <span class="text-[11px] px-1.5 py-0.2 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-500">${catDocs.length}</span>
+            <span class="text-[10px] px-1.5 py-0.2 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-500">${catDocs.length}</span>
           </summary>
           <div class="p-1.5 space-y-0.5 bg-white dark:bg-editorialDark-surface">
             ${catDocs.map(d => `
@@ -647,60 +779,17 @@
             `).join('')}
           </div>
         `;
-        wikiGroup.appendChild(details);
+        container.appendChild(details);
       });
-
-      container.appendChild(wikiGroup);
-
-      // Section 2: 01_Raw Grouped by Series
-      const rawGroup = document.createElement('div');
-      rawGroup.className = 'space-y-2 pt-2';
-      rawGroup.innerHTML = `
-        <div class="px-2 text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500 flex items-center justify-between">
-          <span>01_Raw 설교문 아카이브</span>
-          <span class="text-[10px] text-rose-500 font-normal">Read-only</span>
-        </div>
-      `;
-
-      state.wikiData.sermonSeries.forEach(seriesName => {
-        const seriesDocs = docs.filter(d => d.rootFolder === '01_Raw' && d.folder === seriesName)
-                               .sort((a, b) => (a.frontmatter.created || a.name).localeCompare(b.frontmatter.created || b.name));
-
-        const cleanSeriesTitle = seriesName.replace(/^\[.*?\]\s*/, '');
-
-        const details = document.createElement('details');
-        details.className = 'group border border-editorial-border/60 dark:border-editorialDark-border/60 rounded-lg overflow-hidden';
-        
-        details.innerHTML = `
-          <summary class="flex items-center justify-between px-3 py-2 bg-stone-50/60 dark:bg-stone-900/40 hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer font-medium text-xs text-stone-700 dark:text-stone-300">
-            <span class="flex items-center gap-1.5 truncate">
-              <i data-lucide="scroll" class="w-3.5 h-3.5 text-rose-500"></i>
-              <span class="truncate" title="${seriesName}">${cleanSeriesTitle}</span>
-            </span>
-            <span class="text-[11px] px-1.5 py-0.2 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-500">${seriesDocs.length}</span>
-          </summary>
-          <div class="p-1.5 space-y-0.5 bg-white dark:bg-editorialDark-surface">
-            ${seriesDocs.map(d => `
-              <a href="#/${encodeURIComponent(d.id)}" data-doc-id="${d.id}" class="nav-item block px-2.5 py-1.5 rounded-md text-xs text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors truncate" title="${d.title}">
-                <span class="font-mono text-[11px] text-stone-400 mr-1">${d.name}</span>
-                <span>${d.title || d.name}</span>
-              </a>
-            `).join('')}
-          </div>
-        `;
-        rawGroup.appendChild(details);
-      });
-
-      container.appendChild(rawGroup);
 
       lucide.createIcons();
     }
 
     // Routing & Document Display
     function handleRoute() {
-      let hash = window.location.hash.slice(2); // remove #/
+      let hash = window.location.hash.slice(2);
       if (!hash) {
-        hash = '02_Wiki/index';
+        hash = '02_Wiki/index.md';
       }
       const decoded = decodeURIComponent(hash);
       const targetDoc = resolveDoc(decoded);
@@ -710,26 +799,24 @@
         renderDocument(targetDoc, 'primary');
         updateActiveNavState();
         updateTOC(targetDoc);
-        if (state.graphInstance && state.graphScope === 'local') {
-          renderGraph();
-        }
       }
     }
 
+    // Render Document (Fix: Title shown exactly once, smooth TOC IDs)
     function renderDocument(doc, targetPane = 'primary') {
       const isPrimary = targetPane === 'primary';
       const titleEl = document.getElementById(`${targetPane}-title`);
       const badgesEl = document.getElementById(`${targetPane}-badges`);
       const subjectEl = document.getElementById(`${targetPane}-subject`);
       const bodyEl = document.getElementById(`${targetPane}-body`);
-      const crumbEl = document.getElementById(`${targetPane}-category-crumb`);
+      const folderCrumb = document.getElementById(`${targetPane}-folder-crumb`);
+      const catCrumb = document.getElementById(`${targetPane}-category-crumb`);
       const backlinksSection = document.getElementById(`${targetPane}-backlinks-section`);
       const backlinksList = document.getElementById(`${targetPane}-backlinks-list`);
 
       // 1. Breadcrumbs
-      if (crumbEl) {
-        crumbEl.textContent = `${doc.rootFolder} / ${doc.folder || doc.type}`;
-      }
+      if (folderCrumb) folderCrumb.textContent = doc.rootFolder === '01_Raw' ? '설교문 아카이브' : '신학 개념 아카이브';
+      if (catCrumb) catCrumb.textContent = doc.folder || doc.type;
 
       // 2. Badges
       const typeInfo = TYPE_COLORS[doc.type] || TYPE_COLORS.concept;
@@ -763,8 +850,9 @@
       }
       badgesEl.innerHTML = badgeHTML;
 
-      // 3. Title & Subject
+      // 3. Title (Rendered EXACTLY ONCE here in the header)
       titleEl.textContent = doc.title;
+
       if (subjectEl) {
         if (doc.frontmatter.subject && doc.frontmatter.subject !== doc.title) {
           subjectEl.textContent = `주제: ${doc.frontmatter.subject}`;
@@ -774,11 +862,19 @@
         }
       }
 
-      // 4. Render Body Markdown
-      const preprocessed = preprocessMarkdown(doc.body);
-      bodyEl.innerHTML = marked.parse(preprocessed);
+      // 4. Reset slug counts for heading generator
+      slugCounts.clear();
 
-      // Attach Wikilink Click Handlers (Support Shift+Click for Split View)
+      // Strip first # H1 from body markdown if it duplicates title (Item 5)
+      let bodyMarkdown = doc.body;
+      bodyMarkdown = bodyMarkdown.replace(/^\s*#\s+[^\r\n]+\r?\n*/, '');
+
+      // Preprocess wikilinks, bold **[text]**, callouts
+      const preprocessed = preprocessMarkdown(bodyMarkdown);
+      bodyEl.innerHTML = marked.parse(preprocessed);
+      bodyEl.style.fontSize = `${state.fontSizeScale}%`;
+
+      // Attach Wikilink Click Handlers (Shift+Click or raw sermon link opens split view)
       bodyEl.querySelectorAll('a.wikilink').forEach(link => {
         link.addEventListener('click', (e) => {
           const docId = link.getAttribute('data-doc-id');
@@ -787,7 +883,6 @@
           const target = state.wikiData.docs[docId];
           if (!target) return;
 
-          // If Shift is pressed OR target is a sermon (01_Raw), open in split view!
           if (e.shiftKey || (isPrimary && target.rootFolder === '01_Raw')) {
             e.preventDefault();
             openSplitView(docId);
@@ -835,6 +930,94 @@
       lucide.createIcons();
     }
 
+    // Smooth Scroll to Section Helper (Item 8)
+    function scrollToSection(slug, targetPaneId = 'primary-pane') {
+      const pane = document.getElementById(targetPaneId);
+      const targetEl = document.getElementById(slug);
+      if (pane && targetEl) {
+        const paneRect = pane.getBoundingClientRect();
+        const targetRect = targetEl.getBoundingClientRect();
+        const offset = targetRect.top - paneRect.top + pane.scrollTop - 30;
+        pane.scrollTo({ top: offset, behavior: 'smooth' });
+      }
+    }
+
+    // Update Table of Contents (Inline card, Dropdown, and Right Sidebar TOC)
+    function updateTOC(doc) {
+      const inlineCard = document.getElementById('inline-toc-card');
+      const inlineList = document.getElementById('inline-toc-list');
+      const dropdownList = document.getElementById('toc-dropdown-list');
+      const rightTocWrapper = document.getElementById('right-doc-toc-wrapper');
+      const rightTocList = document.getElementById('right-doc-toc-list');
+      const rightTocCount = document.getElementById('right-doc-toc-count');
+
+      // Filter headings: exclude document title if it matches first H1
+      const headings = (doc.headings || []).filter((h, idx) => {
+        if (idx === 0 && h.level === 1 && h.text === doc.title) return false;
+        return true;
+      });
+
+      if (!headings || headings.length < 2) {
+        inlineCard.classList.add('hidden');
+        dropdownList.innerHTML = '<p class="text-xs text-stone-400 italic px-2 py-1">하위 목차가 없습니다.</p>';
+        rightTocWrapper.classList.add('hidden');
+        return;
+      }
+
+      // 1. Render Inline Card TOC
+      inlineCard.classList.remove('hidden');
+      inlineList.innerHTML = headings.map(h => {
+        const indent = h.level === 2 ? 'font-medium pl-1' : h.level === 3 ? 'pl-4 text-xs text-stone-600 dark:text-stone-400' : 'pl-6 text-xs text-stone-500';
+        return `
+          <a href="#${h.slug}" data-slug="${h.slug}" class="toc-link block text-stone-700 dark:text-stone-300 hover:text-blue-600 dark:hover:text-blue-400 hover:underline transition-colors truncate ${indent}">
+            ${h.text}
+          </a>
+        `;
+      }).join('');
+
+      // 2. Render Dropdown TOC
+      dropdownList.innerHTML = headings.map(h => {
+        const indent = h.level === 2 ? 'font-medium' : h.level === 3 ? 'pl-3 text-stone-500' : 'pl-5 text-stone-400';
+        return `
+          <a href="#${h.slug}" data-slug="${h.slug}" class="toc-link block px-2 py-1 rounded hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 truncate ${indent}">
+            ${h.text}
+          </a>
+        `;
+      }).join('');
+
+      // 3. Render Right Sidebar TOC
+      rightTocWrapper.classList.remove('hidden');
+      rightTocCount.textContent = `${headings.length}개 항목`;
+      rightTocList.innerHTML = headings.map(h => {
+        const indent = h.level === 2 ? 'font-medium' : h.level === 3 ? 'pl-2 text-stone-500' : 'pl-4 text-stone-400';
+        return `
+          <a href="#${h.slug}" data-slug="${h.slug}" class="toc-link block px-2 py-1 rounded hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300 hover:text-blue-600 dark:hover:text-blue-400 truncate ${indent}">
+            ${h.text}
+          </a>
+        `;
+      }).join('');
+
+      // Attach Click Interceptors to all TOC links for 100% Smooth Scroll (Item 8)
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const slug = link.getAttribute('data-slug');
+          scrollToSection(slug, 'primary-pane');
+          document.getElementById('toc-dropdown-menu').classList.add('hidden');
+        });
+      });
+    }
+
+    function updateActiveNavState() {
+      document.querySelectorAll('.nav-item').forEach(el => {
+        if (el.getAttribute('data-doc-id') === state.currentDocId) {
+          el.classList.add('bg-blue-50', 'dark:bg-blue-950/60', 'text-blue-600', 'dark:text-blue-400', 'font-semibold');
+        } else {
+          el.classList.remove('bg-blue-50', 'dark:bg-blue-950/60', 'text-blue-600', 'dark:text-blue-400', 'font-semibold');
+        }
+      });
+    }
+
     // Split View Handling
     function openSplitView(docId) {
       const doc = state.wikiData.docs[docId];
@@ -847,7 +1030,7 @@
       secondaryPane.classList.remove('hidden');
       secondaryPane.classList.add('flex');
 
-      document.getElementById('split-btn-text').textContent = 'Split Active';
+      document.getElementById('split-btn-text').textContent = 'Split On';
       document.getElementById('btn-toggle-split').classList.add('bg-blue-50', 'dark:bg-blue-950/60', 'text-blue-600');
 
       renderDocument(doc, 'secondary');
@@ -863,106 +1046,6 @@
 
       document.getElementById('split-btn-text').textContent = 'Split View';
       document.getElementById('btn-toggle-split').classList.remove('bg-blue-50', 'dark:bg-blue-950/60', 'text-blue-600');
-    }
-
-    // Table of Contents (TOC)
-    function updateTOC(doc) {
-      const container = document.getElementById('toc-list');
-      if (!container) return;
-
-      if (!doc.headings || doc.headings.length === 0) {
-        container.innerHTML = '<p class="text-xs text-stone-400 italic">문서 내 제목이 없습니다.</p>';
-        return;
-      }
-
-      container.innerHTML = doc.headings.map(h => {
-        const indentClass = h.level === 1 ? 'font-semibold' : h.level === 2 ? 'pl-2 text-stone-600 dark:text-stone-400' : 'pl-4 text-xs text-stone-500';
-        return `
-          <a href="#${h.slug}" class="block hover:text-blue-600 dark:hover:text-blue-400 transition-colors truncate ${indentClass}" title="${h.text}">
-            ${h.text}
-          </a>
-        `;
-      }).join('');
-    }
-
-    function updateActiveNavState() {
-      document.querySelectorAll('.nav-item').forEach(el => {
-        if (el.getAttribute('data-doc-id') === state.currentDocId) {
-          el.classList.add('bg-blue-50', 'dark:bg-blue-950/60', 'text-blue-600', 'dark:text-blue-400', 'font-medium');
-        } else {
-          el.classList.remove('bg-blue-50', 'dark:bg-blue-950/60', 'text-blue-600', 'dark:text-blue-400', 'font-medium');
-        }
-      });
-    }
-
-    // Force Graph Initialization
-    function initForceGraph() {
-      const elem = document.getElementById('graph-canvas-container');
-      if (!elem || !state.wikiData) return;
-
-      const isDark = document.documentElement.classList.contains('dark');
-
-      state.graphInstance = ForceGraph()(elem)
-        .backgroundColor(isDark ? '#090d16' : '#fcfbf9')
-        .nodeId('id')
-        .nodeLabel(node => `${node.title || node.name} (${node.type})`)
-        .nodeColor(node => {
-          if (node.id === state.currentDocId) return '#3b82f6';
-          return node.color || '#6b7280';
-        })
-        .nodeVal(node => {
-          return node.id === state.currentDocId ? node.val * 1.5 : node.val;
-        })
-        .linkColor(() => isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)')
-        .linkWidth(link => 1)
-        .onNodeClick(node => {
-          window.location.hash = `#/${encodeURIComponent(node.id)}`;
-        })
-        .width(elem.clientWidth)
-        .height(elem.clientHeight);
-
-      renderGraph();
-
-      window.addEventListener('resize', () => {
-        if (state.graphInstance && elem) {
-          state.graphInstance.width(elem.clientWidth).height(elem.clientHeight);
-        }
-      });
-    }
-
-    function updateGraphTheme() {
-      if (!state.graphInstance) return;
-      const isDark = document.documentElement.classList.contains('dark');
-      state.graphInstance.backgroundColor(isDark ? '#090d16' : '#fcfbf9');
-    }
-
-    function renderGraph() {
-      if (!state.graphInstance || !state.wikiData) return;
-
-      if (state.graphScope === 'global') {
-        state.graphInstance.graphData(state.wikiData.graph);
-        document.getElementById('btn-toggle-graph-scope').textContent = '현재 문서 보기';
-      } else {
-        // Local Graph: Active doc + 1-hop neighbors
-        const curId = state.currentDocId;
-        const connectedNodesSet = new Set([curId]);
-        const filteredLinks = [];
-
-        state.wikiData.graph.links.forEach(l => {
-          const s = typeof l.source === 'object' ? l.source.id : l.source;
-          const t = typeof l.target === 'object' ? l.target.id : l.target;
-
-          if (s === curId || t === curId) {
-            connectedNodesSet.add(s);
-            connectedNodesSet.add(t);
-            filteredLinks.push(l);
-          }
-        });
-
-        const filteredNodes = state.wikiData.graph.nodes.filter(n => connectedNodesSet.has(n.id));
-        state.graphInstance.graphData({ nodes: filteredNodes, links: filteredLinks });
-        document.getElementById('btn-toggle-graph-scope').textContent = '전체 보기';
-      }
     }
 
     // Search Dialog Handling
@@ -1009,7 +1092,7 @@
         if (!query) {
           resultsContainer.innerHTML = `
             <div class="p-6 text-center text-sm text-stone-400">
-              신학 개념, 인물, 설교 본문 키워드를 입력해 보세요.
+              설교문, 신학 개념, 성경 구절 키워드를 입력해 보세요.
             </div>
           `;
           return;
@@ -1054,7 +1137,6 @@
           `;
         }).join('');
 
-        // Close search on result click
         resultsContainer.querySelectorAll('a').forEach(a => {
           a.addEventListener('click', () => closeSearch());
         });
@@ -1066,27 +1148,58 @@
       // Theme toggle
       document.getElementById('btn-theme-toggle').addEventListener('click', toggleTheme);
 
-      // Mobile sidebar toggle
-      const sidebar = document.getElementById('sidebar');
-      const backdrop = document.getElementById('sidebar-backdrop');
-      const toggleSidebar = () => {
-        sidebar.classList.toggle('-translate-x-full');
-        backdrop.classList.toggle('hidden');
+      // Font size buttons (Item 6)
+      document.getElementById('btn-font-inc').addEventListener('click', () => {
+        updateFontSize(state.fontSizeScale + 10);
+      });
+      document.getElementById('btn-font-dec').addEventListener('click', () => {
+        updateFontSize(state.fontSizeScale - 10);
+      });
+      updateFontSize(state.fontSizeScale);
+
+      // TOC Dropdown toggle
+      const btnTocDropdown = document.getElementById('btn-toc-dropdown');
+      const tocMenu = document.getElementById('toc-dropdown-menu');
+      btnTocDropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+        tocMenu.classList.toggle('hidden');
+      });
+      document.addEventListener('click', (e) => {
+        if (!document.getElementById('toc-dropdown-wrapper').contains(e.target)) {
+          tocMenu.classList.add('hidden');
+        }
+      });
+
+      // Mobile Left Sidebar (설교문 아카이브) toggle
+      const leftSidebar = document.getElementById('left-sidebar');
+      const leftBackdrop = document.getElementById('left-backdrop');
+      const toggleLeftSidebar = () => {
+        leftSidebar.classList.toggle('-translate-x-full');
+        leftBackdrop.classList.toggle('hidden');
       };
-      document.getElementById('btn-toggle-sidebar').addEventListener('click', toggleSidebar);
-      backdrop.addEventListener('click', toggleSidebar);
+      document.getElementById('btn-toggle-left-sidebar').addEventListener('click', toggleLeftSidebar);
+      leftBackdrop.addEventListener('click', toggleLeftSidebar);
+
+      // Mobile Right Sidebar (신학 개념 아카이브) toggle
+      const rightSidebar = document.getElementById('right-sidebar');
+      const rightBackdrop = document.getElementById('right-backdrop');
+      const toggleRightSidebar = () => {
+        rightSidebar.classList.toggle('translate-x-full');
+        rightBackdrop.classList.toggle('hidden');
+      };
+      document.getElementById('btn-toggle-right-sidebar').addEventListener('click', toggleRightSidebar);
+      rightBackdrop.addEventListener('click', toggleRightSidebar);
 
       // Split View button
       document.getElementById('btn-toggle-split').addEventListener('click', () => {
         if (state.isSplit) {
           closeSplitView();
         } else {
-          // Open active document's primary source or a related sermon in split view
           const curDoc = state.wikiData.docs[state.currentDocId];
           if (curDoc && curDoc.outlinks && curDoc.outlinks.length > 0) {
             openSplitView(curDoc.outlinks[0].id);
           } else {
-            openSplitView('02_Wiki/구약 4대 내러티브(야곱·욥·요나·다니엘)의 신학적 궤적');
+            openSplitView('01_Raw/[260104-0208] 야곱 강해/260104.md');
           }
         }
       });
@@ -1099,60 +1212,11 @@
         if (curDoc && curDoc.outlinks && curDoc.outlinks.length > 0) {
           openSplitView(curDoc.outlinks[0].id);
         } else {
-          openSplitView('02_Wiki/구약 4대 내러티브(야곱·욥·요나·다니엘)의 신학적 궤적');
+          openSplitView('01_Raw/[260104-0208] 야곱 강해/260104.md');
         }
       });
 
-      // Mobile Right Panel toggle
-      document.getElementById('btn-toggle-right-panel').addEventListener('click', () => {
-        const rp = document.getElementById('right-panel');
-        rp.classList.toggle('hidden');
-        rp.classList.toggle('flex');
-        rp.classList.toggle('fixed');
-        rp.classList.toggle('inset-y-0');
-        rp.classList.toggle('right-0');
-      });
-
-      // Right Panel Tabs (Graph vs TOC)
-      const tabGraph = document.getElementById('tab-graph');
-      const tabTOC = document.getElementById('tab-toc');
-      const graphPanel = document.getElementById('graph-panel-content');
-      const tocPanel = document.getElementById('toc-panel-content');
-      const graphControls = document.getElementById('graph-controls');
-
-      tabGraph.addEventListener('click', () => {
-        tabGraph.classList.add('bg-white', 'dark:bg-stone-900', 'shadow-xs', 'text-blue-600', 'dark:text-blue-400');
-        tabGraph.classList.remove('text-stone-600', 'dark:text-stone-400');
-        tabTOC.classList.remove('bg-white', 'dark:bg-stone-900', 'shadow-xs', 'text-blue-600', 'dark:text-blue-400');
-        tabTOC.classList.add('text-stone-600', 'dark:text-stone-400');
-
-        graphPanel.classList.remove('hidden');
-        tocPanel.classList.add('hidden');
-        graphControls.classList.remove('hidden');
-        if (state.graphInstance) {
-          const el = document.getElementById('graph-canvas-container');
-          state.graphInstance.width(el.clientWidth).height(el.clientHeight);
-        }
-      });
-
-      tabTOC.addEventListener('click', () => {
-        tabTOC.classList.add('bg-white', 'dark:bg-stone-900', 'shadow-xs', 'text-blue-600', 'dark:text-blue-400');
-        tabTOC.classList.remove('text-stone-600', 'dark:text-stone-400');
-        tabGraph.classList.remove('bg-white', 'dark:bg-stone-900', 'shadow-xs', 'text-blue-600', 'dark:text-blue-400');
-        tabGraph.classList.add('text-stone-600', 'dark:text-stone-400');
-
-        tocPanel.classList.remove('hidden');
-        graphPanel.classList.add('hidden');
-        graphControls.classList.add('hidden');
-      });
-
-      // Graph Scope toggle (local vs global)
-      document.getElementById('btn-toggle-graph-scope').addEventListener('click', () => {
-        state.graphScope = state.graphScope === 'local' ? 'global' : 'local';
-        renderGraph();
-      });
-
-      // Hash change router
+      // Hash router
       window.addEventListener('hashchange', handleRoute);
     }
 
