@@ -6,15 +6,21 @@
   <title>홍동우 목사의 설교 저장소</title>
   <meta name="description" content="홍동우 목사의 지난 10년(2016-2026)간의 설교문, 강의안, 외부 기고문 및 신학 위키 아카이브">
   
-  <!-- 웹폰트: 본문 명조체 (Noto Serif KR) 및 고딕체 (Noto Sans KR) -->
+  <!-- 1. 스타일시트 최우선 로드 -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- 2. 웹폰트 최적화: 필수 굵기(400, 500, 700)만 압축 및 비동기 로드(렌더링 차단 방지) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  </noscript>
   
-  <!-- 마크다운 파서 CDN (오프라인 시 자체 파서 폴백 내장) -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  
-  <link rel="stylesheet" href="style.css">
+  <!-- 3. 스크립트 defer 처리: HTML 화면을 먼저 즉시 렌더링한 뒤 순서대로 스크립트 실행 -->
+  <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script defer src="data.js"></script>
+  <script defer src="app.js"></script>
 </head>
 <body>
   <!-- 모바일 백드롭 오버레이 -->
@@ -190,10 +196,5 @@
     </main>
 
   </div>
-
-  <!-- 데이터 번들 로드 -->
-  <script src="data.js"></script>
-  <!-- 클라이언트 웹 앱 로직 -->
-  <script src="app.js"></script>
 </body>
 </html>
