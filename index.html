@@ -1317,8 +1317,13 @@
             ${teaserHtml}
 
             <!-- 열람 제한 글래스모피즘 안내 카드 -->
-            <div class="relative z-10 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-amber-500/12 via-slate-900/90 to-indigo-950/90 text-white border border-amber-500/35 shadow-2xl glass-panel overflow-hidden">
-              <div class="absolute -right-12 -top-12 w-44 h-44 rounded-full bg-amber-500/15 blur-2xl pointer-events-none"></div>
+<div class="relative z-10 p-6 sm:p-8 rounded-3xl
+    bg-gradient-to-br from-amber-50 via-white to-indigo-50
+    dark:from-amber-500/10 dark:via-slate-900/90 dark:to-indigo-950/90
+    text-slate-800 dark:text-white
+    border border-amber-300 dark:border-amber-500/35
+    shadow-2xl overflow-hidden">
+    <div class="absolute -right-12 -top-12 w-44 h-44 rounded-full bg-amber-500/15 blur-2xl pointer-events-none"></div>
 
               <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-5">
                 <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-2xl shrink-0 shadow-inner">
@@ -1328,7 +1333,7 @@
                   <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/25 text-amber-300 border border-amber-400/30 mb-1.5">
                     <span>열람 제한 문서 (Restricted Article)</span>
                   </div>
-                  <h2 class="!my-0 !p-0 !border-0 text-lg sm:text-xl font-extrabold text-white tracking-tight">
+                  <h2 class="!my-0 !p-0 !border-0 text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                     "${escapeHtml(customMessage)}"
                   </h2>
                 </div>
@@ -1339,7 +1344,10 @@
               </p>
 
               <!-- 기고 메타 정보 요약 박스 -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-black/35 border border-white/10 mb-6 font-sans text-xs">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl
+    bg-white/80 dark:bg-black/35
+    border border-slate-200 dark:border-white/10
+    mb-6 font-sans text-xs">              
                 <div>
                   <span class="text-slate-400 block mb-0.5">게재 매체 / 분류</span>
                   <span class="font-bold text-amber-300">✒️ ${escapeHtml(publicationName)}</span>
@@ -1349,7 +1357,7 @@
                   <span class="font-mono text-slate-200">${escapeHtml(pubDate)} (${escapeHtml(doc.basename || "")})</span>
                 </div>
                 ${doc.subject ? `
-                  <div class="sm:col-span-2 pt-2 border-t border-white/10">
+                  <div class="sm:col-span-2 pt-2 border-t border-slate-200 dark:border-white/10">
                     <span class="text-slate-400 block mb-0.5">핵심 주제 요약 (Abstract)</span>
                     <span class="text-slate-200 leading-relaxed">${escapeHtml(doc.subject)}</span>
                   </div>
@@ -1365,7 +1373,9 @@
                       <span>→</span>
                     </button>
                   ` : ""}
-                  <button type="button" onclick="window.navigateToDoc('02_Wiki/index.md')" class="px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-slate-200 transition">
+                  <button type="button" onclick="window.navigateToDoc('02_Wiki/index.md')" class="text-[11px] text-slate-600 dark:text-slate-400
+hover:text-amber-700 dark:hover:text-amber-300
+underline underline-offset-4 transition">
                     🏛️ 카탈로그 홈으로
                   </button>
                 </div>
