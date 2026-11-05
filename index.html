@@ -999,6 +999,150 @@ input:focus-visible {
 .archive-neutral-tag:hover {
   background: var(--surface-hover) !important;
 }
+    
+/* =========================================
+   LIGHT MODE — TYPOGRAPHY CONTRAST FIX
+   ========================================= */
+
+html:not(.dark) {
+  --text-primary: #101828;
+  --text-secondary: #344054;
+  --text-muted: #667085;
+}
+
+/* 본문 전체 */
+html:not(.dark) #docBodyContainer {
+  color: #344054 !important;
+  opacity: 1 !important;
+}
+
+/* 문서의 모든 제목 */
+html:not(.dark) #docBodyContainer h1,
+html:not(.dark) #docBodyContainer h2,
+html:not(.dark) #docBodyContainer h3,
+html:not(.dark) #docBodyContainer h4,
+html:not(.dark) #docBodyContainer h5,
+html:not(.dark) #docBodyContainer h6 {
+  color: #101828 !important;
+  -webkit-text-fill-color: #101828 !important;
+  opacity: 1 !important;
+}
+
+/* H1 — 문서 메인 제목 */
+html:not(.dark) #docBodyContainer h1 {
+  color: #101828 !important;
+  font-size: 2em;
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: -0.04em;
+}
+
+/* H2 — 주요 섹션 제목 */
+html:not(.dark) #docBodyContainer h2 {
+  color: #182230 !important;
+  font-weight: 750;
+  border-bottom: 1px solid #D0D5DD !important;
+}
+
+/* H3 — 하위 섹션 제목 */
+html:not(.dark) #docBodyContainer h3 {
+  color: #1D2939 !important;
+  font-weight: 700;
+}
+
+/* H4 */
+html:not(.dark) #docBodyContainer h4 {
+  color: #344054 !important;
+  font-weight: 700;
+}
+
+/* 강조 텍스트 */
+html:not(.dark) #docBodyContainer strong,
+html:not(.dark) #docBodyContainer b {
+  color: #182230;
+  font-weight: 750;
+}
+
+/* 일반 본문 */
+html:not(.dark) #docBodyContainer p,
+html:not(.dark) #docBodyContainer li {
+  color: #344054;
+}
+
+/* 인용문 */
+html:not(.dark) #docBodyContainer blockquote {
+  color: #344054;
+  background: #F9F4EA;
+  border-left-color: #B7791F;
+}
+
+/* Home Dashboard Titles */
+html:not(.dark) #homeDashboardBanner h1,
+html:not(.dark) #homeDashboardBanner h2,
+html:not(.dark) #homeDashboardBanner h3,
+html:not(.dark) #homeDashboardBanner h4 {
+  color: #101828 !important;
+  -webkit-text-fill-color: #101828 !important;
+  opacity: 1 !important;
+}
+
+/* Hero Card */
+html:not(.dark) #homeDashboardBanner .archive-hero .text-white {
+  color: #101828 !important;
+  -webkit-text-fill-color: #101828 !important;
+}
+
+/* Dashboard 설명 */
+html:not(.dark) #homeDashboardBanner p,
+html:not(.dark) #homeDashboardBanner .text-slate-300 {
+  color: #475467 !important;
+}
+
+/* 숫자 통계 */
+html:not(.dark) #homeDashboardBanner .text-xl {
+  color: #101828;
+}
+
+/* Sidebar */
+html:not(.dark) #leftSidebar .text-slate-400,
+html:not(.dark) #leftSidebar .text-slate-500 {
+  color: #667085 !important;
+}
+
+html:not(.dark) #leftSidebar .text-slate-300 {
+  color: #475467 !important;
+}
+
+/* Document Metadata */
+html:not(.dark) #docMetaCard .text-slate-400,
+html:not(.dark) #docMetaCard .text-slate-500 {
+  color: #667085 !important;
+}
+
+html:not(.dark) #docMetaCard .text-slate-700 {
+  color: #344054 !important;
+}
+
+/* Right TOC */
+html:not(.dark) #rightTocSidebar .text-slate-400,
+html:not(.dark) #rightTocSidebar .text-slate-500 {
+  color: #667085 !important;
+}
+
+/* Breadcrumb */
+html:not(.dark) #docBreadcrumb {
+  color: #667085 !important;
+}
+
+html:not(.dark) #docBreadcrumb .text-slate-800 {
+  color: #101828 !important;
+}
+
+/* Reading time */
+html:not(.dark) #readingTimeBadge {
+  color: #344054 !important;
+}
+
   </style>
 </head>
 
