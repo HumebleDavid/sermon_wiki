@@ -18,26 +18,88 @@
             serif: ['"Noto Serif KR"', 'Georgia', 'serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
           },
-          colors: {
-            archive: {
-              bg: '#090d16',
-              panel: '#111827',
-              card: '#1e293b',
-              border: '#334155',
-              accent: '#f59e0b',
-              wiki: '#6366f1',
-            }
+colors: {
+  archive: {
+    bg: '#10151D',
+    panel: '#171F2A',
+    card: '#1E2936',
+    border: '#2B3543',
+    accent: '#B7791F',
+    wiki: '#5865A8',
+  }
+}
           }
         }
       }
     }
   </script>
   <style>
-    :root {
-      --doc-font-size: 16.5px;
-      --doc-line-height: 1.85;
-      --doc-font-family: 'Noto Serif KR', Georgia, serif;
-    }
+:root {
+  color-scheme: light;
+
+  /* Surface */
+  --page-bg: #F5F6F8;
+  --surface: #FFFFFF;
+  --surface-alt: #F8F9FB;
+  --surface-hover: #F0F2F5;
+
+  /* Typography */
+  --text-primary: #1D2939;
+  --text-secondary: #667085;
+  --text-muted: #98A2B3;
+
+  /* Borders */
+  --border: #E4E7EC;
+  --border-strong: #D0D5DD;
+
+  /* RAW */
+  --raw: #B7791F;
+  --raw-soft: rgba(183, 121, 31, 0.10);
+  --raw-border: rgba(183, 121, 31, 0.25);
+
+  /* WIKI */
+  --wiki: #5865A8;
+  --wiki-soft: rgba(88, 101, 168, 0.10);
+  --wiki-border: rgba(88, 101, 168, 0.25);
+
+  /* Effects */
+  --shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.04);
+  --shadow-md: 0 6px 18px rgba(16, 24, 40, 0.07);
+
+  /* Reading */
+  --doc-font-size: 17px;
+  --doc-line-height: 1.9;
+  --doc-font-family: 'Noto Serif KR', Georgia, serif;
+  --reading-width: 48rem;
+}
+
+/* DARK MODE */
+html.dark {
+  color-scheme: dark;
+
+  --page-bg: #10151D;
+  --surface: #171F2A;
+  --surface-alt: #1D2734;
+  --surface-hover: #263243;
+
+  --text-primary: #E6EAF0;
+  --text-secondary: #A3ADBA;
+  --text-muted: #748094;
+
+  --border: #2B3543;
+  --border-strong: #3A4656;
+
+  --raw: #D6A04E;
+  --raw-soft: rgba(214, 160, 78, 0.12);
+  --raw-border: rgba(214, 160, 78, 0.28);
+
+  --wiki: #9AA8F5;
+  --wiki-soft: rgba(154, 168, 245, 0.12);
+  --wiki-border: rgba(154, 168, 245, 0.28);
+
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.16);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.22);
+}
 
     body {
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -77,43 +139,56 @@
     }
 
     /* 글래스모피즘 패널 & 미세 호버 인터랙션 */
-    .glass-panel {
-      background: rgba(255, 255, 255, 0.82);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(226, 232, 240, 0.85);
-      box-shadow: 0 4px 24px -4px rgba(15, 23, 42, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
-    }
-    .dark .glass-panel {
-      background: rgba(15, 23, 42, 0.78);
-      border: 1px solid rgba(51, 65, 85, 0.75);
-      box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.35), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
-    }
 
-    .bento-card {
-      transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.24s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.24s ease;
-    }
-    .bento-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 18px 36px -12px rgba(15, 23, 42, 0.22), 0 0 24px -6px rgba(99, 102, 241, 0.14);
-    }
+.glass-panel {
+  background: var(--surface);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 
-    /* 캡슐형 메타데이터 배지 */
-    .capsule-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.38rem;
-      padding: 0.24rem 0.72rem;
-      border-radius: 9999px;
-      font-size: 0.73rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      backdrop-filter: blur(8px);
-      transition: all 0.18s ease;
-    }
-    .capsule-pill:hover {
-      transform: translateY(-1px);
-    }
+  border: 1px solid var(--border);
+
+  box-shadow: var(--shadow-sm);
+}
+
+html.dark .glass-panel {
+  background: var(--surface);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Bento cards */
+.bento-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.bento-card:hover {
+  transform: none;
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
+}
+
+/* Pills */
+.capsule-pill {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  transition:
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease;
+}
+
+.capsule-pill:hover {
+  transform: none;
+}
 
     /* 트리 수직 가이드라인 & 액티브 포인트 바 */
     .tree-guide-line {
@@ -549,10 +624,385 @@ body {
   }
 }
 
+html,
+body {
+  background-color: var(--page-bg) !important;
+  color: var(--text-primary);
+}
+
+.bg-archive-pattern {
+  background: var(--page-bg) !important;
+  background-image: none !important;
+}
+
+/* Aurora 제거 */
+.aurora-glow-header {
+  display: none;
+}
+
+/* 02. HEADER */
+
+header.glass-panel {
+  min-height: 64px;
+  background: var(--surface) !important;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  box-shadow: none;
+}
+
+/* 03. BRAND */
+
+.archive-brand-mark {
+  background: var(--text-primary);
+  color: var(--surface);
+  box-shadow: none;
+  border-radius: 9px;
+}
+
+/* 04. LEFT SIDEBAR */
+
+#leftSidebar {
+  background: var(--surface) !important;
+  border-right: 1px solid var(--border) !important;
+}
+
+#leftSidebar > div:first-child {
+  background: var(--surface-alt) !important;
+  border-color: var(--border) !important;
+}
+
+#rawTreeContainer,
+#wikiTreeContainer {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* RAW header */
+#rawPane > div:first-child {
+  background: var(--raw-soft) !important;
+  border-color: var(--raw-border) !important;
+}
+
+/* WIKI header */
+#wikiPane > div:first-child {
+  background: var(--wiki-soft) !important;
+  border-color: var(--wiki-border) !important;
+}
+
+/* Sidebar group title */
+#rawTreeContainer summary,
+#wikiTreeContainer summary {
+  color: var(--text-primary);
+  font-size: 13px;
+  padding: 8px 10px;
+}
+
+/* Sidebar documents */
+.nav-doc-btn {
+  min-height: 34px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.nav-doc-btn:not(.active-raw):not(.active-wiki) {
+  color: var(--text-secondary) !important;
+}
+
+.nav-doc-btn:hover {
+  background: var(--surface-hover) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Active RAW */
+.nav-doc-btn.active-raw {
+  background: var(--raw-soft) !important;
+  color: var(--raw) !important;
+}
+
+.nav-doc-btn.active-raw::before {
+  background: var(--raw);
+  box-shadow: none;
+}
+
+/* Active WIKI */
+.nav-doc-btn.active-wiki {
+  background: var(--wiki-soft) !important;
+  color: var(--wiki) !important;
+}
+
+.nav-doc-btn.active-wiki::before {
+  background: var(--wiki);
+  box-shadow: none;
+}
+
+/* 05. DOCUMENT AREA */
+
+#mainScrollArea {
+  background: var(--page-bg);
+}
+
+#docTopBar {
+  border-color: var(--border) !important;
+  color: var(--text-secondary);
+}
+
+#readingTimeBadge {
+  background: var(--surface-alt) !important;
+  color: var(--text-secondary) !important;
+}
+
+/* Metadata Card */
+#docMetaCard > div {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border-radius: 12px !important;
+}
+
+/* 06. CONTENT TYPOGRAPHY */
+
+.markdown-body {
+  max-width: var(--reading-width);
+  margin-left: auto;
+  margin-right: auto;
+
+  color: var(--text-primary) !important;
+
+  font-size: var(--doc-font-size);
+  line-height: var(--doc-line-height);
+  font-family: var(--doc-font-family);
+
+  letter-spacing: -0.015em;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4 {
+  color: var(--text-primary);
+  letter-spacing: -0.035em;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  font-weight: 750;
+  line-height: 1.4;
+  margin-bottom: 1.7rem;
+}
+
+.markdown-body h2 {
+  font-size: 1.4em;
+  margin-top: 2.8rem;
+  padding-bottom: 0.65rem;
+  border-color: var(--border) !important;
+}
+
+.markdown-body h3 {
+  font-size: 1.18em;
+  margin-top: 2.1rem;
+}
+
+.markdown-body p {
+  margin-bottom: 1.4em;
+}
+
+/* 07. INTERNAL LINKS */
+
+/* WIKI link */
+.wiki-link {
+  color: var(--wiki) !important;
+  background: var(--wiki-soft) !important;
+  border-color: var(--wiki-border) !important;
+
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.wiki-link:hover {
+  background: var(--wiki-soft) !important;
+  transform: none;
+}
+
+/* RAW link */
+.wiki-link.raw-link {
+  color: var(--raw) !important;
+  background: var(--raw-soft) !important;
+  border-color: var(--raw-border) !important;
+}
+
+.wiki-link.raw-link:hover {
+  background: var(--raw-soft) !important;
+}
+
+/* 08. COLOR TOKEN MAPPING */
+
+/* RAW */
+[class*="bg-amber-500/"] {
+  background-color: var(--raw-soft) !important;
+}
+
+[class*="text-amber-"] {
+  color: var(--raw) !important;
+}
+
+[class*="border-amber-"] {
+  border-color: var(--raw-border) !important;
+}
+
+[class*="hover:bg-amber-"]:hover {
+  background-color: var(--raw-soft) !important;
+}
+
+/* WIKI */
+[class*="bg-indigo-500/"] {
+  background-color: var(--wiki-soft) !important;
+}
+
+[class*="text-indigo-"] {
+  color: var(--wiki) !important;
+}
+
+[class*="border-indigo-"] {
+  border-color: var(--wiki-border) !important;
+}
+
+[class*="hover:bg-indigo-"]:hover {
+  background-color: var(--wiki-soft) !important;
+}
+
+/* 09. RIGHT SIDEBAR */
+
+#rightTocSidebar {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+}
+
+#tocListContainer {
+  border-color: var(--border) !important;
+}
+
+#tocListContainer a {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+#tocListContainer a:hover {
+  color: var(--wiki) !important;
+}
+
+/* 10. SEARCH & MODALS */
+
+#searchModal > div,
+#bookmarksModal > div,
+#serendipityModal > div {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  box-shadow: var(--shadow-md);
+}
+
+#openSearchModalBtn {
+  background: var(--surface-alt) !important;
+  border-color: var(--border) !important;
+  color: var(--text-muted) !important;
+}
+
+/* 11. READING PROGRESS */
+
+#readingProgressBar {
+  background: linear-gradient(
+    90deg,
+    var(--raw),
+    var(--wiki)
+  ) !important;
+
+  box-shadow: none !important;
+}
+
+/* 12. ACCESSIBILITY */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--wiki);
+  outline-offset: 3px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+    
+/* =========================================
+   EDITORIAL HERO CARD
+   ========================================= */
+
+.archive-hero {
+  background: var(--surface) !important;
+  color: var(--text-primary) !important;
+
+  border: 1px solid var(--border) !important;
+  border-top: 3px solid var(--text-primary) !important;
+
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+/* 기존 흰색 글씨를 테마에 맞게 변경 */
+.archive-hero .text-white {
+  color: var(--text-primary) !important;
+}
+
+.archive-hero .text-slate-300 {
+  color: var(--text-secondary) !important;
+}
+
+/* 통계 카드 */
+.archive-hero [class*="bg-white/5"] {
+  background: var(--surface-alt) !important;
+}
+
+.archive-hero [class*="border-white/10"] {
+  border-color: var(--border) !important;
+}
+
+/* 통계 라벨 색상 정돈 */
+.archive-hero .text-indigo-300,
+.archive-hero .text-emerald-300,
+.archive-hero .text-pink-300 {
+  color: var(--text-secondary) !important;
+}
+
+.archive-hero .text-amber-300 {
+  color: var(--raw) !important;
+}
+
+/* Hero Badge */
+.archive-hero .capsule-pill {
+  background: var(--raw-soft) !important;
+  color: var(--raw) !important;
+  border: 1px solid var(--raw-border) !important;
+}
+.archive-neutral-tag {
+  color: var(--text-secondary) !important;
+  background: var(--surface-alt) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.archive-neutral-tag:hover {
+  background: var(--surface-hover) !important;
+}
   </style>
 </head>
 
-<body class="bg-slate-50 text-slate-800 dark:bg-archive-bg dark:text-slate-100 bg-archive-pattern transition-colors duration-200 select-none sm:select-auto">
+<body class="bg-slate-50 text-slate-800 dark:bg-archive-bg dark:text-slate-100 bg-archive-pattern transition-colors duration-200 select-auto">
 
   <!-- 최상단 2px 미니멀 프로그레스 바 -->
   <div class="fixed top-0 left-0 right-0 h-[2px] z-50 bg-transparent pointer-events-none">
@@ -565,7 +1015,7 @@ body {
     <div class="aurora-glow-header"></div>
 
     <!-- Top Navigation Header -->
-    <header class="h-15 shrink-0 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 glass-panel z-30 px-3 sm:px-5 flex items-center justify-between gap-2 relative">
+    <header class="h-16 shrink-0 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 glass-panel z-30 px-3 sm:px-5 flex items-center justify-between gap-2 relative">
       <!-- Left: Hamburger & Brand Title -->
       <div class="flex items-center gap-3 min-w-0">
         <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="메뉴 열기">
@@ -575,8 +1025,8 @@ body {
         </button>
 
         <a href="#" id="brandHomeLink" class="flex items-center gap-2.5 group min-w-0">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div class="archive-brand-mark w-9 h-9 rounded-lg flex items-center justify-center">
+  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
             </svg>
           </div>
@@ -1669,7 +2119,7 @@ underline underline-offset-4 transition">
                   const clean = String(t).replace(/^\[\[|\]\]$/g, "").split("|").pop();
                   const target = resolveWikiTarget(clean);
                   return target
-                    ? `<button onclick="window.navigateToDoc('${escapeHtml(target.id)}')" class="capsule-pill bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/25">🎓 ${escapeHtml(clean)}</button>`
+                    ? `<button onclick="window.navigateToDoc('${escapeHtml(target.id)}')" class="capsule-pill archive-neutral-tag">🎓 ${escapeHtml(clean)}</button>`
                     : `<span class="capsule-pill bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">🎓 ${escapeHtml(clean)}</span>`;
                 }).join("")}
                 ${concepts.map(c => {
@@ -1720,8 +2170,7 @@ underline underline-offset-4 transition">
           homeBanner.innerHTML = `
             <div class="stagger-item stagger-2 grid grid-cols-1 md:grid-cols-12 gap-3.5">
               <!-- Bento Card 1: 메인 아카이브 현황 (8 cols) -->
-              <div class="md:col-span-8 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white border border-indigo-500/30 shadow-xl bento-card flex flex-col justify-between relative overflow-hidden">
-                <div class="absolute -right-10 -bottom-10 w-48 h-48 rounded-full bg-indigo-500/20 blur-2xl pointer-events-none"></div>
+<div class="archive-hero md:col-span-8 p-6 sm:p-7 rounded-2xl bento-card flex flex-col justify-between relative overflow-hidden">                
                 <div>
                   <span class="capsule-pill bg-amber-500/20 text-amber-300 border border-amber-400/30 mb-3">✨ BENTO DASHBOARD · 2016–2026</span>
                   <h3 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">10년 신학·설교 아카이브 입체 조망</h3>
